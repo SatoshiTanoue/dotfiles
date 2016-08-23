@@ -17,25 +17,58 @@ call dein#add('Shougo/neosnippet.vim')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/neosnippet-snippets')
 call dein#add('Shougo/neocomplete.vim')
-
 call dein#add('nathanaelkane/vim-indent-guides')
 
+"閉じタグ設定"
+call dein#add('soramugi/auto-ctags.vim')
+
+"ruby end 自動入力"
+call dein#add('tpope/vim-endwise')
+
+augroup MyXML
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+augroup END
+
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
+
+"TREEView control+E"
 call dein#add('scrooloose/nerdtree')
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
+call dein#add('Shougo/neomru.vim')
+" unite.vimの設定
+noremap <C-U><C-F> :Unite -buffer-name=file file<CR> " ファイル一覧
+noremap <C-U><C-R> :Unite file_mru<CR> " 最近使ったファイル一覧
+
+au FileType unite nnoremap <silent> <buffer> <expr> <C-i> unite#do_action('split') " ウィンドウを分割して開く
+au FileType unite inoremap <silent> <buffer> <expr> <C-i> unite#do_action('split')
+
+" ESCキーを2回押すと終了する
+au FileType unite nnoremap <silent> <buffer> <ESC><ESC> q
+au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>q
+
+call dein#add('tyru/caw.vim.git')
+nmap <C-K> <Plug>(caw:i:toggle)
+vmap <C-K> <Plug>(caw:i:toggle)
+
 call dein#add('tpope/vim-surround')
 call dein#add('tomtom/tcomment_vim')
 " You can specify revision/branch/tag.
 call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
-
 " Required:
 call dein#end()
 
 " Required:
 filetype plugin indent on
 
-" If you want to install not installed plugins on startup.
-" if dein#check_install()
-  " call dein#install()
-" endif
+ " If you want to install not installed plugins on startup.
+ " if dein#check_install()
+ " call dein#install()
+ " endif
 
 "End dein Scripts-------------------------
 
@@ -133,11 +166,14 @@ set shiftwidth=4
 set smartindent
 
 "文字コードの設定"
-set encoding=utf-8
-set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
-set fileformats=unix,dos,mac
+" set encoding=utf-8
+" set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
+" set fileformats=unix,dos,mac
+"
 
-
+"xでコピーされないように"
+noremap PP "0p
+noremap x "_x
 "----------------------------------------
 " 表示設定
 "----------------------------------------
@@ -215,7 +251,7 @@ endif
 """"""""""""""""""""""""""""""
 "ESCで日本語入力オフ設定
 """"""""""""""""""""""""""""""
-ime setting
+"ime setting
 if has('multi_byte_ime') || has('xim') || has('gui_macvim')
 "	Insert mode: lmap off, IME ON
 	set iminsert=2
@@ -248,11 +284,3 @@ if has('syntax')
 	call ZenkakuSpace()
 endif
 
-""""""""""""""""""""""""""""""
-"文字コード設定
-""""""""""""""""""""""""""""""
-set number
-set nocompatible
-set encoding=utf-8
-set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
-set fileformats=unix,dos,mac
