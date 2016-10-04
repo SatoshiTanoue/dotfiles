@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/usr/local/Cellar/vim/7.4.1910/share/vim/vim74/colors'
+let g:netrw_dirhist_2='/Users/TanoueSatoshi/public'
+let g:netrw_dirhist_3='/Users/TanoueSatoshi/.vim'
+let g:netrw_dirhist_4='/Users/TanoueSatoshi/Desktop/research/japanesePaper'
+let g:netrw_dirhist_5='/Users/TanoueSatoshi/.vim/dein/repos/github.com/Shougo/dein.vim'
+let g:netrw_dirhist_6='/Users/TanoueSatoshi/.vim/dein/repos/github.com/Shougo/dein.vim/repos'
+let g:netrw_dirhist_7='/Users/TanoueSatoshi/.vim/dein/repos/github.com/Shougo/dein.vim'
