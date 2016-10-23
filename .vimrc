@@ -1,27 +1,53 @@
+"
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+" set background=dark " or dark
+
+
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
 endif
-" Required:
-set runtimepath^=~/.vim/dein/repos/github.com/Shougo/dein.vim
+"Required:
+set runtimepath+=/Users/TanoueSatoshi/.vim/dein/repos/github.com/Shougo/dein.vim
 
 " Required:
-call dein#begin(expand('~/.vim/dein/'))
-
-" Let dein manage dein
-" Required:
-call dein#add('Shougo/dein.vim')
+call dein#begin('/Users/TanoueSatoshi/.vim/dein')
 
 " Add or remove your plugins here:
 call dein#add('Shougo/neosnippet.vim')
-call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/neosnippet-snippets')
 call dein#add('Shougo/neocomplete.vim')
+call dein#add('Shougo/unite.vim')
 call dein#add('nathanaelkane/vim-indent-guides')
+call dein#add('ujihisa/unite-colorscheme')
+
+call dein#add('scrooloose/syntastic')
+
+"wでsyntasticがチェックできるように設定
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+let g:syntastic_mode_map = {'mode': 'passive'} 
+augroup AutoSyntastic
+    autocmd!
+    autocmd InsertLeave,TextChanged * call s:syntastic() 
+augroup END
+function! s:syntastic()
+    w
+    SyntasticCheck
+endfunction
 
 "閉じタグ設定"
 call dein#add('soramugi/auto-ctags.vim')
 
+"rubyためのコード補完
+call dein#add('osyo-manga/vim-monster')
+" vim-monsterを有効にする
+let g:neocomplete#sources#omni#input_patterns = {
+\  'ruby': '[^. *\t]\.\w*\|\h\w*::'
+\}
+
+"rubyのハイライト
+call dein#add('todesking/ruby_hl_lvar.vim')
 "ruby end 自動入力"
 call dein#add('tpope/vim-endwise')
 
@@ -59,6 +85,20 @@ call dein#add('tpope/vim-surround')
 call dein#add('tomtom/tcomment_vim')
 " You can specify revision/branch/tag.
 call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+call dein#add('flazz/vim-colorschemes')
+"カラースキーマ
+call dein#add('altercation/vim-colors-solarized')
+call dein#add( 'dracula/vim')
+
+"Markdwonの設定
+call dein#add('plasticboy/vim-markdown')
+call dein#add('kannokanno/previm')
+call dein#add('tyru/open-browser.vim')
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+let g:previm_open_cmd = 'open -a Chrome'
 " Required:
 call dein#end()
 
@@ -66,14 +106,14 @@ call dein#end()
 filetype plugin indent on
 
  " If you want to install not installed plugins on startup.
- " if dein#check_install()
- " call dein#install()
- " endif
+ if dein#check_install()
+	call dein#install()
+ endif
 
 "End dein Scripts-------------------------
 
 "neocomplete-------------------------			
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 " Use neocomplete.
@@ -125,7 +165,6 @@ inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 "let g:neocomplete#enable_auto_select = 1
 "let g:neocomplete#disable_auto_complete = 1
 "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -146,8 +185,6 @@ endif
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "standad setting"-------------------------
-"
-syntax enable
 "数の表示
 set number
 "カッコのマッピング
@@ -158,18 +195,15 @@ set matchtime=1
 set clipboard=unnamed
 
 "tabの設定"
-set tabstop=4
-set smartindent
-set shiftwidth=4
-
-"インデントの設定"
-set smartindent
+set expandtab "タブ入力を複数の空白入力に置き換える
+set tabstop=4 shiftwidth=4 softtabstop=4
+set smartindent "改行時に入力された行の末尾に合わせて次の行のインデントを増減する
 
 "文字コードの設定"
-" set encoding=utf-8
-" set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
-" set fileformats=unix,dos,mac
-"
+ set encoding=utf-8
+ set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
+ set fileformats=unix,dos,mac
+
 
 "xでコピーされないように"
 noremap PP "0p
@@ -177,6 +211,15 @@ noremap x "_x
 "----------------------------------------
 " 表示設定
 "----------------------------------------
+syntax on
+color solarized
+
+if has('gui_running')
+    set background=light
+else
+    set background=dark
+endif
+
 "スプラッシュ(起動時のメッセージ)を表示しない
 set shortmess+=I
 "エラー時の音とビジュアルベルの抑制(gvimは.gvimrcで設定)
@@ -191,10 +234,6 @@ set shellslash
 set number
 "括弧の対応表示時間
 set showmatch matchtime=1
-"タブを設定
-set ts=4 sw=4 sts=4
-"自動的にインデントする
-set smartindent
 "Cインデントの設定
 set cinoptions+=:0
 "タイトルを表示
@@ -266,7 +305,7 @@ endif
 "コメント以外で全角スペースを指定しているので、scriptencodingと、
 "このファイルのエンコードが一致するよう注意！
 "強調表示されない場合、ここでscriptencodingを指定するとうまくいく事があります。
-"scriptencoding cp932
+scriptencoding cp932
 
 "デフォルトのZenkakuSpaceを定義
 function! ZenkakuSpace()
@@ -284,3 +323,13 @@ if has('syntax')
 	call ZenkakuSpace()
 endif
 
+""""""""""""""""""""""""""""""
+"全角スペースを表示
+""""""""""""""""""""""""""""""
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+
+set laststatus=2 " Always display the statusline in all windows
+set showtabline=2 " Always display the tabline, even if there is only one tab
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
